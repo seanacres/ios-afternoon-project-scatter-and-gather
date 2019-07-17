@@ -45,7 +45,10 @@ class ViewController: UIViewController {
                     label.transform = CGAffineTransform(rotationAngle: self.generateRandomAngle())
                     
                     // move to random point
-                    label.transform = CGAffineTransform(translationX: self.generateRandomPoint().x, y: self.generateRandomPoint().y)
+                    let newX = self.generateRandomPoint().x - label.frame.origin.x
+                    let newY = self.generateRandomPoint().y - label.frame.origin.y
+                    
+                    label.transform = CGAffineTransform(translationX: newX, y: newY)
 
                     // change colors
                     label.textColor = self.generateRandomColor()
@@ -88,9 +91,9 @@ class ViewController: UIViewController {
     
     // generate random point
     func generateRandomPoint() -> CGPoint {
-        let x = CGFloat(Int.random(in: 1...250))
-        let y = CGFloat(Int.random(in: 1...600))
-        
+        let x = CGFloat.random(in: 1...view.safeAreaLayoutGuide.layoutFrame.size.width)
+        let y = CGFloat.random(in: 1...view.safeAreaLayoutGuide.layoutFrame.size.height)
+
         return CGPoint(x: x, y: y)
     }
     
