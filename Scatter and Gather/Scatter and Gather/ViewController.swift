@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var isScattered: Bool?
+    var isScattered: Bool = false
     var labelArray: [UILabel] = []
     var imageView: UIImageView = UIImageView(image: UIImage(named: "lambda_logo"))
     
@@ -21,7 +21,13 @@ class ViewController: UIViewController {
     }
 
     @IBAction func toggleButtonPressed(_ sender: Any) {
-        performScatterAnimation()
+        if isScattered {
+            performGatherAnimation()
+            isScattered.toggle()
+        } else {
+            performScatterAnimation()
+            isScattered.toggle()
+        }
     }
     
     func performScatterAnimation() {
@@ -35,8 +41,13 @@ class ViewController: UIViewController {
             // animate labels
             UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1, animations: {
                 for label in self.labelArray {
+                    // rotate to random angle
                     label.transform = CGAffineTransform(rotationAngle: self.generateRandomAngle())
-                    label.center = self.generateRandomPoint()
+                    
+                    // move to random point
+                    label.transform = CGAffineTransform(translationX: self.generateRandomPoint().x, y: self.generateRandomPoint().y)
+
+                    // change colors
                     label.textColor = self.generateRandomColor()
                     label.backgroundColor = self.generateRandomColor()
                 }
@@ -49,27 +60,33 @@ class ViewController: UIViewController {
         UIView.animateKeyframes(withDuration: 4, delay: 0, options: [], animations: {
             
             // fade logo
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1, animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.5, animations: {
                 self.imageView.alpha = 1
             })
             
             // animate labels
             UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1, animations: {
                 for label in self.labelArray {
+                    
+                    // reset to original rotation and position
                     label.transform = .identity
+                    
+                    // reset colors
+                    label.textColor = .black
+                    label.backgroundColor = .clear
                 }
             })
-            
-            
         }, completion: nil)
     }
     
+    // generate random angle
     func generateRandomAngle() -> CGFloat {
         let angle = CGFloat(Int.random(in: 0...360))
         
         return angle * .pi / 180
     }
     
+    // generate random point
     func generateRandomPoint() -> CGPoint {
         let x = CGFloat(Int.random(in: 1...250))
         let y = CGFloat(Int.random(in: 1...600))
@@ -77,6 +94,7 @@ class ViewController: UIViewController {
         return CGPoint(x: x, y: y)
     }
     
+    // generate random color
     func generateRandomColor() -> UIColor {
         let hue = CGFloat.random(in: 0...1)
         let saturation = CGFloat.random(in: 0.5...1)
@@ -110,6 +128,7 @@ class ViewController: UIViewController {
             label.font = UIFont.boldSystemFont(ofSize: 50.0)
             label.textAlignment = .center
             labelArray.append(label)
+            
             stackView.addArrangedSubview(label)
         }
         
@@ -123,7 +142,5 @@ class ViewController: UIViewController {
             imageView.heightAnchor.constraint(equalToConstant: 58)
             ])
     }
-    
-    
 }
 
