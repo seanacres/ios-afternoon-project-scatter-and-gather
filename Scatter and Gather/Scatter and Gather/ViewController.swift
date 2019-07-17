@@ -21,8 +21,61 @@ class ViewController: UIViewController {
     }
 
     @IBAction func toggleButtonPressed(_ sender: Any) {
+        performScatterAnimation()
     }
     
+    func performScatterAnimation() {
+        UIView.animateKeyframes(withDuration: 4, delay: 0, options: [], animations: {
+            
+            // fade logo
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.25, animations: {
+                self.imageView.alpha = 0
+            })
+            
+            // animate labels
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1, animations: {
+                for label in self.labelArray {
+                    label.transform = CGAffineTransform(rotationAngle: self.generateRandomAngle())
+                    label.center = self.generateRandomPoint()
+                }
+            })
+            
+        }, completion: nil)
+    }
+    
+    func performGatherAnimation() {
+        UIView.animateKeyframes(withDuration: 4, delay: 0, options: [], animations: {
+            
+            // fade logo
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1, animations: {
+                self.imageView.alpha = 1
+            })
+            
+            // animate labels
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1, animations: {
+                for label in self.labelArray {
+                    label.transform = .identity
+                }
+            })
+            
+            
+        }, completion: nil)
+    }
+    
+    func generateRandomAngle() -> CGFloat {
+        let angle = CGFloat(Int.random(in: 0...360))
+        
+        return angle * .pi / 180
+    }
+    
+    func generateRandomPoint() -> CGPoint {
+        let x = CGFloat(Int.random(in: 1...320))
+        let y = CGFloat(Int.random(in: 1...800))
+        
+        return CGPoint(x: x, y: y)
+    }
+    
+    // set up and configure views for controller
     func configureViews() {
         
         // string to create labels for
