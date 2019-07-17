@@ -37,6 +37,8 @@ class ViewController: UIViewController {
                 for label in self.labelArray {
                     label.transform = CGAffineTransform(rotationAngle: self.generateRandomAngle())
                     label.center = self.generateRandomPoint()
+                    label.textColor = self.generateRandomColor()
+                    label.backgroundColor = self.generateRandomColor()
                 }
             })
             
@@ -69,10 +71,18 @@ class ViewController: UIViewController {
     }
     
     func generateRandomPoint() -> CGPoint {
-        let x = CGFloat(Int.random(in: 1...320))
-        let y = CGFloat(Int.random(in: 1...800))
+        let x = CGFloat(Int.random(in: 1...250))
+        let y = CGFloat(Int.random(in: 1...600))
         
         return CGPoint(x: x, y: y)
+    }
+    
+    func generateRandomColor() -> UIColor {
+        let hue = CGFloat.random(in: 0...1)
+        let saturation = CGFloat.random(in: 0.5...1)
+        let brightness = CGFloat.random(in: 0.5...1)
+        
+        return UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1)
     }
     
     // set up and configure views for controller
